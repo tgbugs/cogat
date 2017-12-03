@@ -103,8 +103,8 @@ entities=entities+']>\n\n'
 # 4. add descriptions of properties
 properties='<!--\n//Annotation Properties\n-->\n\n'
 
-concept_fields=['dc:Title','dc:Contributor','dc:Date','skos:definition','skos:prefLabel','skos:altLabel','skos:hasTopConcept']
-task_fields=['dc:Title','dc:Contributor','dc:Date','skos:definition','skos:prefLabel','skos:altLabel']
+concept_fields=['dc:title','dc:contributor','dc:date','skos:definition','skos:prefLabel','skos:altLabel','skos:hasTopConcept']
+task_fields=['dc:title','dc:contributor','dc:date','skos:definition','skos:prefLabel','skos:altLabel']
 
 annotation_properties=['&'+a.replace(':',';') for a in set(concept_fields + task_fields)]
 
@@ -156,13 +156,13 @@ for c in owl_classes:
         for f in concept_fields:
             if e.find(f)>-1:
                 owl_dict[id][f]=getcontent(e).replace('&','and').replace('/','-').replace('_','-')
-    owl_dict[id]['dc:Title']=make_sentence_case(owl_dict[id]['dc:Title'].replace('Cognitive Atlas : Lexicon : ',''))
+    owl_dict[id]['dc:title']=make_sentence_case(owl_dict[id]['dc:title'].replace('Cognitive Atlas : Lexicon : ',''))
     if id not in id_dictionary:
         id_dictionary[id]='CAO_%05d'%dict_ctr
         dict_ctr+=1
 
     owl_dict[id]['dc:identifier']=id
-#    owl_dict[id]['dc:Title'].replace('Cognitive Atlas : Lexicon : ','').lower()
+#    owl_dict[id]['dc:title'].replace('Cognitive Atlas : Lexicon : ','').lower()
     owl_dict[id]['rdf:about']=id_dictionary[id]
     owl_dict[id]['skos:prefLabel']=make_sentence_case(owl_dict[id]['skos:prefLabel'])
     owl_dict[id]['relations']=[]
@@ -204,19 +204,19 @@ for c in owl_classes:
         for f in task_fields:
             if e.find(f)>-1:
                 owl_task_dict[id][f]=getcontent(e).replace('&','and').replace('/','-').replace('_','-')
-    if len(owl_task_dict[id]['dc:Title'].replace('Cognitive Atlas : Lexicon : ',''))==0:
+    if len(owl_task_dict[id]['dc:title'].replace('Cognitive Atlas : Lexicon : ',''))==0:
         del owl_task_dict[id]
         owl_task_id.remove(id)
         continue
 
-    owl_task_dict[id]['dc:Title']=make_sentence_case(owl_task_dict[id]['dc:Title'].replace('Cognitive Atlas : Lexicon : ',''))
+    owl_task_dict[id]['dc:title']=make_sentence_case(owl_task_dict[id]['dc:title'].replace('Cognitive Atlas : Lexicon : ',''))
 
     if id not in id_dictionary:
         id_dictionary[id]='CAO_%05d'%dict_ctr
         dict_ctr+=1
 
     owl_task_dict[id]['dc:identifier']=id
-#    owl_task_dict[id]['dc:Title'].replace('Cognitive Atlas : Lexicon : ','').lower()
+#    owl_task_dict[id]['dc:title'].replace('Cognitive Atlas : Lexicon : ','').lower()
     owl_task_dict[id]['rdf:about']=id_dictionary[id]
     owl_task_dict[id]['skos:prefLabel']=make_sentence_case(owl_task_dict[id]['skos:prefLabel'])
     owl_task_dict[id]['relations']=[]
@@ -309,11 +309,11 @@ f.write(entities)
 f.write(rdf_preamble+'\n\n\n')
 f.write(properties)
 
-attrs_to_loop=['dc:Title','dc:Contributor','dc:Date','skos:definition','skos:prefLabel','skos:altLabel','skos:hasTopConcept']
+attrs_to_loop=['dc:title','dc:contributor','dc:date','skos:definition','skos:prefLabel','skos:altLabel','skos:hasTopConcept']
 for a in owl_dict.keys():
     d=owl_dict[a]
     f.write('<owl:Class rdf:about="&cogat;%s">\n'%id_dictionary[a])
-    f.write('\t<rdfs:label>%s</rdfs:label>\n'%d['dc:Title'])
+    f.write('\t<rdfs:label>%s</rdfs:label>\n'%d['dc:title'])
     f.write('\t<dc:identifier>%s</dc:identifier>\n'%a)
     for l in attrs_to_loop:
         f.write('\t<%s>%s</%s>\n'%(l,d[l],l))
@@ -350,12 +350,12 @@ for a in owl_dict.keys():
     f.write('</owl:Class>\n\n\n')
 
 
-attrs_to_loop=['dc:Title','dc:Contributor','dc:Date','skos:definition','skos:prefLabel','skos:altLabel']
+attrs_to_loop=['dc:title','dc:contributor','dc:date','skos:definition','skos:prefLabel','skos:altLabel']
 for a in owl_task_dict.keys():
     d=owl_task_dict[a]
     f.write('<owl:Class rdf:about="&cogat;%s">\n'%id_dictionary[a])
     f.write('\t<dc:identifier>%s</dc:identifier>\n'%a)
-    f.write('\t<rdfs:label>%s</rdfs:label>\n'%d['dc:Title'])
+    f.write('\t<rdfs:label>%s</rdfs:label>\n'%d['dc:title'])
     for l in attrs_to_loop:
         f.write('\t<%s>%s</%s>\n'%(l,d[l],l))
     # write out conditions
@@ -381,7 +381,7 @@ for a in owl_task_dict.keys():
             c = [x.replace('&#34;','') for x in c]
             c = [x.replace('&#34','') for x in c]
             c = [x.replace('&','and') for x in c]
-            condname=owl_task_dict[a]['dc:Title'].replace(' ','_')+'-'+c[3].replace(' ','_')
+            condname=owl_task_dict[a]['dc:title'].replace(' ','_')+'-'+c[3].replace(' ','_')
             f.write('<owl:Class rdf:about="&cogat;%s">\n'%id_dictionary[c[0]])
             f.write('\t<dc:identifier>%s</dc:identifier>\n'%c[0])
             f.write('\t<skos:definition>%s</skos:definition>\n'%c[4])
@@ -398,7 +398,7 @@ for a in owl_task_dict.keys():
             c = [x.replace('&#34;','') for x in c]
             c = [x.replace('&#34','') for x in c]
             c = [x.replace('&','and') for x in c]
-            contname=owl_task_dict[a]['dc:Title'].replace(' ','_')+'-'+c[3].replace(' ','_')
+            contname=owl_task_dict[a]['dc:title'].replace(' ','_')+'-'+c[3].replace(' ','_')
             f.write('<owl:Class rdf:about="&cogat;%s">\n'%id_dictionary[c[0]])
             f.write('\t<dc:identifier>%s</dc:identifier>\n'%c[0])
             f.write('\t<rdfs:label>%s</rdfs:label>\n'%contname)
